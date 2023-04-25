@@ -31,7 +31,7 @@ _main() {
 
     _switch_to_repository
 
-    if _git_is_dirty || "$INPUT_SKIP_DIRTY_CHECK"; then
+    if "$INPUT_SKIP_DIRTY_CHECK" || _git_is_dirty; then
 
         _set_github_output "changes_detected" "true"
 
@@ -43,7 +43,7 @@ _main() {
         # (git-diff detects beter if CRLF of files changes and does NOT
         # proceed, if only CRLF changes are detected. See #241 and #265
         # for more details.)
-        if [ -n "$(git diff --staged)" ] || "$INPUT_SKIP_DIRTY_CHECK"; then
+        if "$INPUT_SKIP_DIRTY_CHECK" || [ -n "$(git diff --staged)" ]; then
             _local_commit
 
             _tag_commit
